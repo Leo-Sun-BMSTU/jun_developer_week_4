@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<main class="container">
+  <div class="row">
+    <div class="col-8 col-lg-4 offset-2 offset-lg-4">
+{#      <form method="post">#}
+          {% crispy form %}
+{#        <p><input class="btn btn-primary w-100" type="submit" value="Зарегистрироваться"></p>#}
+{#      </form>#}
+    </div>
+  </div>
+</main>
+
+{% endblock content %}

@@ -11,10 +11,9 @@ class Company(models.Model):
     name = models.CharField(max_length=64)
     location = models.CharField(max_length=64)
     employee_count = models.IntegerField()
-    logo = models.ImageField(upload_to=settings.MEDIA_COMPANY_IMAGE_DIR)
+    logo = models.ImageField(upload_to=settings.MEDIA_COMPANY_IMAGE_DIR, default='')
     description = models.TextField()
-    owner = models.OneToOneField(User, on_delete=models.CASCADE,
-                                 related_name="companies", blank=True, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="companies")
 
 
 class Specialty(models.Model):

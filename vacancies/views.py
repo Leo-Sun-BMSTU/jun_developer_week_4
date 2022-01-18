@@ -1,9 +1,14 @@
+import os.path
+
 from django import views
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import CreateView
 
@@ -96,22 +101,22 @@ def company_info(request, company_id: int):
         })
 
 
-def my_company_create(request):
-    """
-
-    :param request:
-    :return:
-    """
-    if request.user.is_anonymous:
-        return redirect('accounts:login')
-    if not Company.objects.get(owner_id=request.user.id):
-        return render(
-            request,
-            'company_create.html',
-            context={
-                'form': CompanyForm,
-            }
-        )
+# def my_company_create(request):
+#     """
+#
+#     :param request:
+#     :return:
+#     """
+#     if request.user.is_anonymous:
+#         return redirect('accounts:login')
+#     if not Company.objects.get(owner_id=request.user.id):
+#         return render(
+#             request,
+#             'company_create.html',
+#             context={
+#                 'form': CompanyForm,
+#             }
+#         ), HttpResponseRedirect('my_company')
 
 
 def send_application(request, vacancy_id: int):
@@ -167,9 +172,12 @@ class VacancyView(views.View):
         vacancy = get_object_or_404(Vacancy, id=vacancy_id)
         company = Company.objects.get(id=vacancy.company_id)
         if form.is_valid():
-            form.save()
-            return redirect('vacancies:send_application')
-        messages.error('Неверные данные!')
+            application = form.save(commit=False)
+            application.vacancy = Vacancy.objects.get(id=vacancy_id)
+            application.user = User.objects.get(id=request.user.id)
+            application.save()
+            return redirect('vacancies:send_application', vacancy_id)
+        messages.error(request, 'Неверные данные!')
         return render(
             request,
             self.template_name,
@@ -179,23 +187,178 @@ class VacancyView(views.View):
                 'form': form,
             }
         )
-        # vacancy = get_object_or_404(Vacancy, id=vacancy_id)
-        # company = Company.objects.get(id=vacancy.company_id)
-        # form = ApplicationForm(request.POST)
-        # print(form.cleaned_data)
-        # if form.is_valid():
-        #     form.save()
-        # # Application.objects.create(**form.cleaned_data)
-        #     return redirect('vacancies:send_application')
-        # messages.error(request, 'Error!')
-        # return render(
-        #     request,
-        #     self.template_name,
-        #     context={
-        #         'vacancy': vacancy,
-        #         'company': company,
-        #         'form': form,
-        #     })
+
+
+# def lets_start(request):
+#     """
+#
+#     :param request:
+#     :return:
+#     """
+#     if request.user.is_anonymous:
+#         redirect('accounts:login')
+#     form = CompanyForm(request.POST, request.FILES)
+#     if form.is_valid():
+#         company = form.save(commit=False)
+#         company.owner = User.objects.get(id=request.user.id)
+#         company.save()
+#         return redirect('vacancies:my_company')
+#     messages.error(request, 'Неверные данные!')
+#     return render(
+#         request,
+#         'company_create.html',
+#         context={
+#             'form': form,
+#         }
+#     )
+
+
+# @login_required
+# def my_company_edit(request):
+#     """
+#
+#     :param request:
+#     :return:
+#     """
+#     company = Company.objects.get(owner_id=request.user.id)
+#     form = CompanyForm(request.POST, request.FILES)
+#     if form.is_valid():
+#         company.update(**form.changed_data)
+#         return redirect('vacancies:my_company')
+
+
+class MyCompanyView(views.View):
+    """
+
+    """
+    def get(self, request):
+        """
+
+        :param request:
+        :return:
+        """
+        if request.user.is_anonymous:
+            return redirect('accounts:login')
+        else:
+            company = Company.objects.get(owner=request.user)
+            if company:
+                return render(
+                    request,
+                    'my_company.html',
+                    context={
+                        'form': CompanyForm(instance=company)
+                    }
+                )
+            if Company.objects.get(owner=request.user).DoesNotExist:
+                return redirect('vacancies:my_company_create')
+
+    def post(self, request):
+        """
+
+        :param request:
+        :return:
+        """
+        company = Company.objects.get(owner=request.user)
+        form = CompanyForm(request.POST, request.FILES, instance=company)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Информация обновлена')
+        else:
+            messages.error(request, 'Неверные данные')
+            return render(
+                request,
+                'my_company.html',
+                context={
+                    'form': form,
+                }
+            )
+
+
+        # if not request.user.is_anonymous:
+        #     user = request.user
+        #     form = None
+        #     try:
+        #         user_company = Company.objects.get(owner=user)
+        #     except Company.DoesNotExist:
+        #         user_company = None
+        #     if user_company:
+        #         form = CompanyForm(instance=user_company)
+        #         return render(
+        #             request,
+        #             'company.html',
+        #             context={
+        #                 'form': form,
+        #                 'company': user_company,
+        #                 'vacancy_count': Vacancy.objects.filter(company_id=user_company.id)
+        #             }
+        #         )
+        #     return redirect('vacancies:my_company_create')
+
+    # def post(self, request):
+    #     """
+    #
+    #     :param request:
+    #     :return:
+    #     """
+    #     if not request.user.is_anonymous:
+    #         user = request.user
+    #         user_company = Company.objects.get(owner=user)
+    #         form = CompanyForm(request.POST, request.FILES, instance=user_company)
+    #         if form.is_valid():
+    #             messages.info(request, 'Информация обновлена')
+    #         else:
+    #             messages.error(request, 'Введены неверные данные!')
+    #             return render(
+    #                 'company.html',
+    #                 context={
+    #                     'form': form,
+    #                 }
+    #             )
+
+
+class MyCompanyCreateView(LoginRequiredMixin, views.View):
+    """
+
+    """
+    def get(self, request):
+        """
+
+        :param request:
+        :return:
+        """
+        company = Company.objects.get(owner=request.user)
+        if company:
+            return redirect('vacancies:my_company')
+        form = CompanyForm()
+        return render(
+            request,
+            'company.html',
+            context={
+                'form': form,
+            }
+        )
+
+    def post(self, request):
+        """
+
+        :param request:
+        :return:
+        """
+        form = CompanyForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_company_instance = form.save(commit=False)
+            user_company_instance.owner = request.user
+            user_company_instance.save()
+            messages.info(request, 'Компания была создана')
+        else:
+            messages.error(request, 'Проверьте правильность введенной информации!')
+            return render(
+                request,
+                'company.html',
+                context={
+                    'form': form
+                })
+        return redirect('vacancies:my_company')
 
 
 def my_company_info(request):
@@ -204,24 +367,21 @@ def my_company_info(request):
     :param request:
     :return:
     """
-    company = Company.objects.get(owner_id=request.user.id)
     if request.user.is_anonymous:
         return redirect('accounts:login')
-    return render(
-        request,
-        'company.html',
-        context={
-            'company': company,
-            'company_vacancies': Vacancy.objects.filter(company_id=company.id),
-            'company_vacancies_count': Vacancy.objects.filter(company_id=company.id).count(),
-        }
-    )
-
-
-class MyCompanyView(views.View):
-    """
-
-    """
+    try:
+        company = Company.objects.get(owner_id=request.user.id)
+        return render(
+            request,
+            'company.html',
+            context={
+                'company': company,
+                'company_vacancies': Vacancy.objects.filter(company_id=company.id),
+                'company_vacancies_count': Vacancy.objects.filter(company_id=company.id).count(),
+            }
+        )
+    except Company.DoesNotExist:
+        return redirect('vacancies:my_company_lets_start')
 
 
 class MyCompanyVacancies(views.View):
@@ -246,15 +406,17 @@ class MyCompanyVacancy(views.View):
     pass
 
 
-# class UserLoginView(LoginView):
-#     """
-#
-#     """
-#     redirect_authenticated_user = True
-#     template_name = 'login.html'
-#
-#
-# class UserSignupView(CreateView):
-#     form_class = UserCreationForm
-#     success_url = 'login'
-#     template_name = 'signup.html'
+class MyCompanyVacancyCreateView(LoginRequiredMixin, views.View):
+    """
+
+    """
+    def get(self, request):
+        """
+
+        :param request:
+        :return:
+        """
+        return render(
+            request,
+            ''
+        )

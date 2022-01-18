@@ -1,15 +1,18 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 <title>Создать карточку компании | Джуманджи</title>
 {% endblock title %}
 
 {% block content %}
+    <h1 class="h1 text-center mx-auto mt-4 py-5">
+        <strong>Создайте карточку <br>своей компании</strong></h1>
     <main class="container mt-3 pb-5">
     <section class="col-12 col-lg-6 offset-lg-3 mt-5 card">
       <div class="card-body px-3 pb-4">
           {% csrf_token %}
-          {{ form.as_p }}
+          {% crispy form %}
       </div>
     </section>
    </main>

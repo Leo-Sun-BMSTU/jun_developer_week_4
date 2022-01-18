@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+{#{% load mycompany_confirm_delete %}#}
+
+{% block title %}
+  {% if form %}
+    Моя компания |
+  {% else %}
+    Создать карточку компании |
+  {% endif %}
+{% endblock %}
+
+{% block style %}
+  <style>
+      body {
+          background-color: #F6F2E6;
+      }
+  </style>
+{% endblock %}
+
+{% block main %}
+  {% if form %}
+    <div class="row mt-5">
+{#      {% include 'jobs/my_company/company_nav.html' %}#}
+      <div class="col-12 col-lg-8">
+        <div class="card">
+          <div class="card-body px-4 pb-4">
+            <section class="tab-pane fade show active">
+              <h2 class="h4 pt-2 pb-3">Информация о&nbsp;компании</h2>
+{#              {% include 'messages.html' %}#}
+              {% crispy form 'bootstrap4' %}
+              {% if is_new_company is None %}
+                {% get_variable as variables %}
+                {% include "modal_confirm.html" with variables=variables %}
+              {% endif %}
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <section class="col-12 col-lg-6 offset-lg-3 mt-5 card">
+      <div class="card-body px-3 pb-4">
+        <h1 class="h4 pt-2">Моя компания</h1>
+        {% include 'messages.html' %}
+        <p class="mt-2">Пока мы думаем, что вы – частное лицо. Хотите создать карточку компании,
+          разместить информаию и вакансии?</p>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <p class="btn btn-info mb-2"><a href={% url 'mycompany-create' %}>Создать карточку компании</a></p>
+        </form>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

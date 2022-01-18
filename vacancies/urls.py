@@ -18,11 +18,12 @@ urlpatterns = [
 
     path('companies/<int:company_id>', views.company_info, name='company_info'),
 
-    path('mycompany/', views.my_company_info, name='my_company'),
-    path('mycompany/create', views.my_company_create, name='my_company_create'),
+    path('mycompany/', views.MyCompanyView.as_view(), name='my_company'),
+    # path('mycompany/edit', views.MyCompanyCreateView.as_view(), name='my_company_edit'),
+    path('mycompany/create', views.MyCompanyCreateView.as_view(), name='my_company_create'),
     path('mycompany/vacancies', views.MyCompanyVacancies.as_view(), name='my_company_vacancies'),
     path('mycompany/vacancies/<int:vacancy_id>', views.MyCompanyVacancy.as_view(), name='my_company_vacancy'),
-    path('mycompany/vacancies/create', views.MyCompanyView.as_view(), name='my_vacancy_create'),
+    path('mycompany/vacancies/create', views.MyCompanyVacancyCreateView.as_view(), name='my_vacancy_create'),
     path('mycompany/letsstart', views.MyCompanyView.as_view(), name='my_company_lets_start')
 ]
 

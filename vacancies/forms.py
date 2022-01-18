@@ -8,14 +8,13 @@ from vacancies.models import Application, Company, Vacancy
 
 class ApplicationForm(forms.ModelForm):
     """
-
+    Класс формы отклика на вакансию.
+    Form class for application to a vacancy.
     """
-    # name = forms.CharField(max_length=60, label='Ваше имя')
-    # phone = PhoneNumberField(label='Номер телефона')
-    # message = forms.CharField(widget=forms.Textarea, label='Сопроводительное письмо')
     class Meta:
         """
-
+        Класс настройки и создания формы отклика из модели отклика.
+        Creating and customization application form from application model.
         """
         model = Application
         fields = ('written_username', 'written_phone', 'written_cover_letter')
@@ -34,9 +33,14 @@ class ApplicationForm(forms.ModelForm):
 
 class CompanyForm(forms.ModelForm):
     """
-
+    Класс формы компании.
+    Form class for company.
     """
     class Meta:
+        """
+        Класс настройки и создания формы компании из модели компании.
+        Creating and customization company form from company model.
+        """
         model = Company
         fields = ('name', 'location', 'employee_count', 'logo', 'description')
         labels = {
@@ -56,11 +60,24 @@ class CompanyForm(forms.ModelForm):
 
 class VacancyForm(forms.ModelForm):
     """
-
+    Класс формы вакансии.
+    Form class for vacancy.
     """
     class Meta:
+        """
+        Класс настройки и создания формы компании из модели вакансии.
+        Creating and customization company form from vacancy model.
+        """
         model = Vacancy
         fields = ('title', 'skills', 'description', 'salary_min', 'salary_max', 'published_at')
+        labels = {
+            'title': 'Название вакансии',
+            'skills': 'Навыки',
+            'description': 'Описание',
+            'salary_min': 'Минимальная ставка',
+            'salary_max': 'Максимальная ставка',
+            'published_at': 'Дата публикации',
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

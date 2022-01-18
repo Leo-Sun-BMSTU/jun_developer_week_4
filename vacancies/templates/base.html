@@ -41,13 +41,17 @@
               <a href="{% url 'accounts:login' %}" class="nav-link font-weight-bold">Вход</a>
             {% else %}
                 <div class="btn-group">
-                <button type="button" class="btn dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button"
+                        class="btn dropdown-toggle font-weight-bold"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
                   {{user.username}}: {{user.first_name}} {{user.last_name}}
                 </button>
                 <div class="dropdown-menu dropdown-menu-right mt-3">
                   <a  class="dropdown-item py-2">Профиль</a>
-{#                  <a href="{% url 'myresume' %}" class="dropdown-item py-2">Резюме</a>#}
                   <a href="{% url 'vacancies:my_company' %}" class="dropdown-item py-2">Компания</a>
+                  <a href="{% url 'vacancies:my_company_vacancies' %}" class="dropdown-item py-2">Мои вакансии</a>
                   <a href="{% url 'accounts:logout' %}" class="dropdown-item py-2">Выйти</a>
                 </div>
               </div>

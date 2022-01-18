@@ -1,17 +1,3 @@
-{#<!DOCTYPE html>#}
-{#<html lang="ru">#}
-{##}
-{#<head>#}
-{#  <meta charset="UTF-8">#}
-{#  <title>Моя компания | Джуманджи</title>#}
-{#  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">#}
-{#  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">#}
-{#  <style>#}
-{#    body {#}
-{#      background-color: #F6F2E6;#}
-{#    }#}
-{#  </style>#}
-{#</head>#}
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
@@ -77,69 +63,12 @@
             <section class="tab-pane fade show active">
               <h2 class="h4 pt-2 pb-3">Информация о&nbsp;компании</h2>
               </p>
-{#              <form action="/echo" enctype="multipart/form-data">#}
-{#                <div class="row">#}
-{#                  <div class="col-12 col-md-6">#}
-{#                    <div class="form-group pb-2">#}
-{#                      <label class="mb-2 text-dark" for="companyName">Название компании</label>#}
-{#                      <input class="form-control" type="text" value="{{ company.name }}" id="companyName">#}
-{#                    </div>#}
-{#                  </div>#}
-{#                  <div class="col-12 col-md-6">#}
-{#                    <div class="form-group">#}
-{#                      <label class="mb-2 text-dark" for="companyLogo">Логотип</label>#}
-{#                      <div class="row align-items-center">#}
-{#                        <div class="col-6">#}
-{#                          <img src="{{ company.logo.url }}" alt="" style="max-width: 120px;height: auto;">#}
-{#                        </div>#}
-{#                        <div class="col-6" style="position: relative;">#}
-{#                          <div class="input-group-prepend" style="position: absolute; top: 0;right: 15px;">#}
-{#                            <span class="btn btn-info px-4">Загрузить</span>#}
-{#                          </div>#}
-{#                          <div class="custom-file" style="">#}
-{#                            <input type="file" class="custom-file-input" id="inputGroupFile01">#}
-{#                          </div>#}
-{#                        </div>#}
-{#                      </div>#}
-{#                    </div>#}
-{#                  </div>#}
-{#                </div>#}
-{#                <div class="row">#}
-{#                  <div class="col-12 col-md-6">#}
-{#                    <div class="form-group pb-2">#}
-{#                      <label class="mb-2 text-dark" for="companyTeam">Количество человек в компании</label>#}
-{#                      <input class="form-control" type="text" value="{{ company.employee_count }}" id="">#}
-{#                    </div>#}
-{#                  </div>#}
-{#                  <div class="col-12 col-md-6">#}
-{#                    <div class="form-group pb-2">#}
-{#                      <label class="mb-2 text-dark" for="companyLocation">География</label>#}
-{#                      <input class="form-control" type="text" value="{{ company.location }}" id="companyLocation">#}
-{#                    </div>#}
-{#                  </div>#}
-{#                </div>#}
-{#                <div class="form-group pb-2">#}
-{#                  <label class="mb-2 text-dark" for="companyInfo">Информация о&nbsp;компании</label>#}
-{#                  <textarea class="form-control" rows="4" id="companyInfo" style="color:#000;">Для тех, кто желает работать в&nbsp;комфортном офисе,&nbsp;&mdash; у&nbsp;нас их&nbsp;целых три. Исторически так сложилось, что руководство и&nbsp;менеджерский состав располагается в&nbsp;Москве (обусловлено близостью заказчиков), центр разработки&nbsp;&mdash; в&nbsp;Ульяновске, в&nbsp;т.&nbsp;ч. школа молодых разработчиков и&nbsp;QA-центр&nbsp;&mdash; в&nbsp;Казани.</textarea>#}
-{#                </div>#}
-{#                <div class="form-group">#}
-{#                  <input type="submit" class="btn btn-info" value="Сохранить">#}
-{#                </div>#}
                 {% crispy form %}
-{#              </form>#}
             </section>
-            <!-- END Tab -->
           </div>
         </div>
       </div>
     </div>
   </main>
 
-
 {% endblock content %}
-
-{#  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>#}
-{#  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>#}
-{#  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>#}
-{#</body>#}
-{#</html>#}

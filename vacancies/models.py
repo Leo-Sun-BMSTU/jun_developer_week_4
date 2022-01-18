@@ -6,7 +6,8 @@ from django.conf import settings
 
 class Company(models.Model):
     """
-
+    Класс для модели компании.
+    Company model class.
     """
     name = models.CharField(max_length=64)
     location = models.CharField(max_length=64)
@@ -18,7 +19,8 @@ class Company(models.Model):
 
 class Specialty(models.Model):
     """
-
+    Класс для модели специальности.
+    Specialty model class.
     """
     code = models.CharField(max_length=64)
     title = models.CharField(max_length=64)
@@ -27,7 +29,8 @@ class Specialty(models.Model):
 
 class Vacancy(models.Model):
     """
-
+    Класс для модели вакансии.
+    Vacancy model class.
     """
     title = models.CharField(max_length=64)
     specialty = models.ForeignKey(Specialty, related_name='vacancies',
@@ -43,7 +46,8 @@ class Vacancy(models.Model):
 
 class Application(models.Model):
     """
-
+    Класс для модели отклика.
+    Application model class.
     """
     written_username = models.CharField(max_length=64)
     written_phone = PhoneNumberField()
